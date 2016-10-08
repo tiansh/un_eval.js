@@ -32,6 +32,7 @@ The <code>un_eval</code> support following types
 | Object | _(Yes)_<sup>[2][3]</sup> | 
 
 Notes:
+
 1. ES5 style function only. Arrow functions, generator functions, and, native functions are not supported.
 2. All other object is treated as Object type.
 3. <code>({})</code> will be generated if any circular found.
@@ -71,7 +72,9 @@ un_eval(obj2); // '({"x":({"y":({"x":({})})}), "y":({"x":({"y":({})})})})'
 2. <code>un_eval</code> will convert native function to <code>"null"</code>.
 3. <code>un_eval</code> will format codes differently from <code>uneval</code>.
 
-<code>un_eval</code> is designed to output source with no side affect. But there may be some bugs in the code.
+### Warning
+
+Although, <code>un_eval</code> is designed to output source with no side effect. But there may be some bugs or limitations in the code. You should avoid using <code>un_eval</code> any untrustable objects (maybe from user input) then <code>eval</code> it. NEVER use <code>eval</code> unless you know what will happen.
 
 **USE AS YOUR OWN RISK.**
 

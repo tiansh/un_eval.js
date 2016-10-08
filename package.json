@@ -26,5 +26,8 @@
   "bugs": {
     "url": "https://github.com/tiansh/un_eval.js/issues"
   },
-  "homepage": "https://github.com/tiansh/un_eval.js#readme"
+  "homepage": "https://github.com/tiansh/un_eval.js#readme",
+  "files": [
+    "un_eval.js"
+  ]
 }

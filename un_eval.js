@@ -5,6 +5,16 @@
     this;
   
   var un_eval = (function () {
+
+    var numberToString = Number.prototype.toString;
+    var numberValueOf = Number.prototype.valueOf;
+    var stringValueOf = String.prototype.valueOf;
+    var booleanValueOf = Boolean.prototype.valueOf;
+    var regexpToString = RegExp.prototype.toString;
+    var dateGetTime = Date.prototype.getTime;
+    var functionToString = Function.prototype.toString;
+    var arrayMap = Array.prototype.map;
+
     var helper = function (obj, seen) {
       try {
         if (obj === null) return 'null'; // null
@@ -13,21 +23,21 @@
         if (typeof obj === 'number') {
           if (1 / obj === -Infinity) return '-0';
           // toString should work all values but not -0
-          return Number.prototype.toString.call(obj);
+          return numberToString.call(obj);
         }
         // string or boolean
         if (!(obj instanceof Object)) return JSON.stringify(obj);
         // String, Number, Boolean
-        if (obj instanceof String) return '(new String(' + helper(String.prototype.valueOf.call(obj)) + '))';
-        if (obj instanceof Number) return '(new Number(' + helper(Number.prototype.valueOf.call(obj)) + '))';
-        if (obj instanceof Boolean) return '(new Boolean(' + helper(Boolean.prototype.valueOf.call(obj)) + '))';
+        if (obj instanceof String) return '(new String(' + helper(stringValueOf.call(obj)) + '))';
+        if (obj instanceof Number) return '(new Number(' + helper(numberValueOf.call(obj)) + '))';
+        if (obj instanceof Boolean) return '(new Boolean(' + helper(booleanValueOf.call(obj)) + '))';
         // RegExp; toString should work
-        if (obj instanceof RegExp) return RegExp.prototype.toString.call(obj);
+        if (obj instanceof RegExp) return regexpToString.call(obj);
         // Date; convert obj to Number should work
-        if (obj instanceof Date) return '(new Date(' + helper(Number(obj)) + '))';
+        if (obj instanceof Date) return '(new Date(' + helper(dateGetTime.call(obj)) + '))';
         // Function
         if (obj instanceof Function) {
-          var func = Function.prototype.toString.call(obj);
+          var func = functionToString.call(obj);
           if (/\{\s*\[native code\]\s*\}\s*$/.test(func)) return null;
           return '(' + func + ')';
         }
@@ -35,7 +45,7 @@
         var newSeen = seen.concat([obj]);
         // Array
         if (obj instanceof Array) {
-          var array = obj.map(function (o) { return helper(o, newSeen); });
+          var array = arrayMap.call(obj, function (o) { return helper(o, newSeen); });
           // Add a comma at end if last element is a hole
           var lastHole = array.length && !((array.length - 1) in array);
           return '[' + array.join(', ') + (lastHole ? ',' : '') + ']';
@@ -63,7 +73,7 @@
     };
   }());
 
-  un_eval.VERSION = '1.0.0';
+  un_eval.VERSION = '1.0.2';
   
   if (typeof exports != 'undefined' && !exports.nodeType) {
     if (typeof module != 'undefined' && !module.nodeType && module.exports) {
