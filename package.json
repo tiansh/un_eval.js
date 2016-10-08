@@ -1,6 +1,6 @@
 {
   "name": "un-eval",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "un_eval converts an Object to its source",
   "main": "un_eval.js",
   "scripts": {
