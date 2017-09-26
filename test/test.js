@@ -70,6 +70,7 @@ describe('String', function () {
   stringItem('string empty', '');
   stringItem('string null char.', '\0');
   stringItem('string ascii', String.fromCharCode.apply(String, [...Array(128)].map((_, i) => i)));
+  stringItem('string with line separators', '\u000a\u000d\u2028\u2029');
   stringItem('string unicode', '\u4e16\u754c\u4f60\u597d');
   stringItem('string more unicode', '\u{1f602}');
 
@@ -217,6 +218,7 @@ describe('Object', function () {
   objectItem('empty', {});
   objectItem('simple', { p: 42 });
   objectItem('multi', { p: 42, q: true, hello: 'world' });
+  objectItem('special key', {'\u2028\u2029': 42, '\r\n': 88, '\u4e16\u754c\u4f60\u597d': 'hello', '\u{1f602}': 'world' });
   objectItem('same ref.', function () {
     var a = {};
     a.p = a.q = { x: true };
@@ -229,6 +231,14 @@ describe('Object', function () {
     return a;
   }(), function (output) {
     assert.deepStrictEqual(Object.keys(output.x), []);
+  });
+  objectItem('circular array', function () {
+    var a = [];
+    a[0] = a;
+    return a;
+  }(), function (output) {
+    assert.deepStrictEqual(Object.keys(output), ['0']);
+    assert.deepStrictEqual(output[0], []);
   });
   objectItem('circular complex', function () {
     var a = {};

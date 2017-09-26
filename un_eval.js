@@ -3,6 +3,12 @@
   var root = typeof self == 'object' && self.self === self && self ||
     typeof global == 'object' && global.global === global && global ||
     this;
+
+  var safeJson = function (obj) {
+    return JSON.stringify(obj)
+      .replace(/\u2028/g, '\\u2028')
+      .replace(/\u2029/g, '\\u2029');
+  };
   
   var un_eval = (function () {
 
@@ -15,7 +21,7 @@
     var functionToString = Function.prototype.toString;
     var arrayMap = Array.prototype.map;
 
-    var helper = function (obj, seen) {
+    var helper = function helper(obj, seen) {
       try {
         if (obj === null) return 'null'; // null
         if (obj === void 0) return '(void 0)'; // undefined
@@ -26,7 +32,7 @@
           return numberToString.call(obj);
         }
         // string or boolean
-        if (!(obj instanceof Object)) return JSON.stringify(obj);
+        if (!(obj instanceof Object)) return safeJson(obj);
         // String, Number, Boolean
         if (obj instanceof String) return '(new String(' + helper(stringValueOf.call(obj)) + '))';
         if (obj instanceof Number) return '(new Number(' + helper(numberValueOf.call(obj)) + '))';
@@ -41,7 +47,10 @@
           if (/\{\s*\[native code\]\s*\}\s*$/.test(func)) return null;
           return '(' + func + ')';
         }
-        if (seen.indexOf(obj) !== -1) return '({})';
+        if (seen.indexOf(obj) !== -1) {
+          if (obj instanceof Array) return '[]';
+          return '({})';
+        }
         var newSeen = seen.concat([obj]);
         // Array
         if (obj instanceof Array) {
@@ -54,7 +63,7 @@
         if (obj instanceof Object) {
           var pairs = [];
           for (var key in obj) {
-            pairs.push(JSON.stringify(key) + ':' + helper(obj[key], newSeen));
+            pairs.push(safeJson(key) + ':' + helper(obj[key], newSeen));
           }
           return '({' + pairs.join(', ') + '})';
         }
