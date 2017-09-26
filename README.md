@@ -35,7 +35,7 @@ Notes:
 
 1. ES5 style function only. Arrow functions, generator functions, and, native functions are not supported.
 2. All other object is treated as Object type.
-3. <code>({})</code> will be generated if any circular found.
+3. <code>({})</code>, or <code>[]</code> will be generated if any circular found.
 
 ### Examples
 
