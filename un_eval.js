@@ -27,7 +27,7 @@
         if (obj === void 0) return '(void 0)'; // undefined
         if (obj == null) return '({})'; // maybe undetectable
         if (typeof obj === 'number') {
-          if (1 / obj === -Infinity) return '-0';
+          if (obj === 0 && 1 / obj === -Infinity) return '-0';
           // toString should work all values but not -0
           return numberToString.call(obj);
         }

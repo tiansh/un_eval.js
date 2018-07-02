@@ -35,6 +35,8 @@ describe('Number', function () {
   numberItem('number PI', Math.PI);
   numberItem('number 1e100', 1e100);
   numberItem('number 1e-100', 1e-100);
+  numberItem('number 1e-320', 1e-320);
+  numberItem('number -1e-320', -1e-320);
   numberItem('number 1.23e100', 1.23e100);
   numberItem('number 1.23e100', 1.23e-100);
   numberItem('number Infinity', 1 / 0);
