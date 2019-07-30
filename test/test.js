@@ -87,6 +87,7 @@ describe('String', function () {
   stringObjectItem('String ascii', String.fromCharCode.apply(String, [...Array(128)].map((_, i) => i)));
   stringObjectItem('String unicode', '\u4e16\u754c\u4f60\u597d');
   stringObjectItem('String more unicode', '\u{1f602}');
+  stringObjectItem('String with newline', 'first line\nsecond line');
 });
 
 describe('Boolean', function () {
